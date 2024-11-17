@@ -1,3 +1,0 @@
-Authentication
-==============
-Some content here...
