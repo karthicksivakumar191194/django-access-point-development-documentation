@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Creating Custom Field &mdash; Django Access Point  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Integrating Custom Field into CRUD API" href="custom-field-integration.html" />
+    <link rel="prev" title="Creating CRUD API" href="crud.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Django Access Point
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-management.html">User Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="crud.html">Creating CRUD API</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Creating Custom Field</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom-field-integration.html">Integrating Custom Field into CRUD API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Django Access Point</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Creating Custom Field</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/custom-field.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="creating-custom-field">
+<h1>Creating Custom Field<a class="headerlink" href="#creating-custom-field" title="Permalink to this heading"></a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">CustomFieldViewSet</span></code> class is a base view for handling <code class="docutils literal notranslate"><span class="pre">Custom</span> <span class="pre">Field</span> <span class="pre">CRUD</span></code> (Create, Read, Update, Delete) operations
+in a Django Rest Framework (DRF) API for a module. It inherits from <strong>GenericViewSet</strong> and provides implementations for the common
+operations needed to manage <strong>Custom Fields for a module</strong> in a typical RESTful API.</p>
+<dl class="simple">
+<dt><strong>CustomFieldViewSet provides following APIs:</strong></dt><dd><ul class="simple">
+<li><p><strong>Create</strong>: Allows creating new Custom Fields.</p></li>
+<li><p><strong>Read</strong>: Retrieves Custom Fields.</p></li>
+<li><p><strong>Update</strong>: Modifies existing Custom Fields.</p></li>
+<li><p><strong>Delete</strong>: Removes Custom Fields.</p></li>
+<li><p><strong>List</strong>: List all Custom Fields.</p></li>
+</ul>
+</dd>
+</dl>
+<p>By inheriting from <code class="docutils literal notranslate"><span class="pre">CustomFieldViewSet</span></code>, you can quickly implement these APIs without needing to write custom
+code for each one.</p>
+<p><strong>models.py</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django_access_point.models.custom_field</span> <span class="kn">import</span> <span class="n">CustomFieldBase</span><span class="p">,</span> <span class="n">CustomFieldValueBase</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Tenant</span><span class="p">,</span> <span class="n">Post</span>
+
+<span class="k">class</span> <span class="nc">PostCustomField</span><span class="p">(</span><span class="n">CustomFieldBase</span><span class="p">):</span>
+    <span class="n">tenant</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span>
+        <span class="n">Tenant</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<p><em>Note: These are the required fields in the Custom Field Model. You can also add your own custom fields as per your requirements.</em></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">PostCustomFieldValue</span><span class="p">(</span><span class="n">CustomFieldValueBase</span><span class="p">):</span>
+    <span class="n">submission</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Post</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s2">&quot;custom_field_values&quot;</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
+    <span class="n">custom_field</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">PostCustomField</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><em>Note: These are the required fields in the  Custom Field Value Model. Make sure these 2 field names are not changed. You can also add your own custom fields as per your requirements.</em></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">submission</span></code>: This should be a <strong>ForeignKey</strong> to the model you want to map the <strong>Custom Field Value</strong> to. For instance, if you want to map this Custom Field Value to the <code class="docutils literal notranslate"><span class="pre">Post</span></code> model, use <code class="docutils literal notranslate"><span class="pre">Post</span></code> as the foreign key. Make sure to specify the <code class="docutils literal notranslate"><span class="pre">related_name</span></code> as <code class="docutils literal notranslate"><span class="pre">custom_field_values</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">custom_field</span></code>: This should be a <strong>ForeignKey</strong> to the model that defines the custom field. For example, if you are mapping the Custom Field Value to <code class="docutils literal notranslate"><span class="pre">PostCustomField</span></code>, specify <code class="docutils literal notranslate"><span class="pre">PostCustomField</span></code> as the foreign key.</p></li>
+</ul>
+<p><strong>serializers.py</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django_access_point.serializers.custom_field</span> <span class="kn">import</span> <span class="n">CustomFieldSerializer</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">PostCustomField</span>
+
+<span class="k">class</span> <span class="nc">PostCustomFieldSerializer</span><span class="p">(</span><span class="n">CustomFieldSerializer</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">PostCustomField</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">CustomFieldSerializer</span><span class="o">.</span><span class="n">Meta</span><span class="o">.</span><span class="n">fields</span>
+</pre></div>
+</div>
+<p><strong>views.py</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django_access_point.views.custom_field</span> <span class="kn">import</span> <span class="n">CustomFieldViewSet</span>
+<span class="kn">from</span> <span class="nn">.serializers</span> <span class="kn">import</span> <span class="n">PostCustomFieldSerializer</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">PostCustomField</span>
+
+<span class="k">class</span> <span class="nc">PostCustomFieldViewSet</span><span class="p">(</span><span class="n">CustomFieldViewSet</span><span class="p">):</span>
+    <span class="n">queryset</span> <span class="o">=</span> <span class="n">PostCustomField</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="n">serializer_class</span> <span class="o">=</span> <span class="n">PostCustomFieldSerializer</span>
+</pre></div>
+</div>
+<p><strong>urls.py</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rest_framework.routers</span> <span class="kn">import</span> <span class="n">DefaultRouter</span>
+<span class="kn">from</span> <span class="nn">.views</span> <span class="kn">import</span> <span class="n">PostCustomFieldViewSet</span>
+
+<span class="n">router</span> <span class="o">=</span> <span class="n">DefaultRouter</span><span class="p">()</span>
+<span class="n">router</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;custom-fields/posts&quot;</span><span class="p">,</span> <span class="n">PostCustomFieldViewSet</span><span class="p">,</span> <span class="n">basename</span><span class="o">=</span><span class="s2">&quot;post.custom_fields&quot;</span><span class="p">)</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">urlpatterns</span> <span class="o">+=</span> <span class="n">router</span><span class="o">.</span><span class="n">urls</span>
+</pre></div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="crud.html" class="btn btn-neutral float-left" title="Creating CRUD API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="custom-field-integration.html" class="btn btn-neutral float-right" title="Integrating Custom Field into CRUD API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Django Access Point.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
