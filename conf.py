@@ -10,7 +10,7 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
+import os
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
@@ -57,6 +57,14 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 #
 html_theme = "sphinx_rtd_theme"
 
+# Check if running on Read the Docs (the READTHEDOCS environment variable is set on their servers)
+if os.environ.get('READTHEDOCS') == 'True':
+    # Read the Docs builds typically use the $READTHEDOCS_OUTPUT variable for the build path
+    html_output = os.environ.get('READTHEDOCS_OUTPUT', '_build/html')
+else:
+    # Local build path can remain as the default (_build/html)
+    html_output = '_build/html'
+    
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
