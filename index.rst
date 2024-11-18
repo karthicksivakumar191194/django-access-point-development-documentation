@@ -1,14 +1,15 @@
 Welcome to Django Access Point documentation!
 ==============================================
 
-Django Access Point is a package designed to streamline the creation of APIs for user
-and role management in SaaS projects. It simplifies ``authentication``, ``authorization``, ``user management``,
-and ``role-based access control``, enabling developers to build robust and scalable applications
-with ease.
+Django Access Point is a powerful package designed to simplify the creation of APIs for user authentication, role-based access control (RBAC), and user management in SaaS projects. It provides robust features for streamlining the process of building APIs that manage users, roles, and permissions, as well as offering flexible support for custom fields across modules.
 
-Additionally, this package provides a viewset for ``creating CRUD`` (Create, Read, Update, Delete) APIs easily for `developers`. It also supports ``custom fields`` allowing `users` to manage their own specific fields for each module without coding.
+This package is ideal for developers looking to implement user and role management, and it also supports custom field management, which means users can configure their own fields for any module without additional code.
 
-For more details, `Click here to view the PIP Package <https://pypi.org/project/django-access-point/>`_.
+**Key Features:**
+    * ``User Authentication``: Easily manage authentication logic for user accounts.
+    * ``Role-based Access Control (RBAC)``: Assign roles to users and control access to different modules based on those roles.
+    * ``CRUD API Generation``: Automatically create full CRUD APIs for models, reducing boilerplate code.
+    * ``Custom Fields``: Enable users to manage custom fields for each module dynamically.
 
 Check out the :doc:`usage` section for further information, including
 how to :ref:`installation` the package.
