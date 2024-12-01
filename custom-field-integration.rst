@@ -8,13 +8,15 @@ To integrate a ``Custom Field`` into the ``CRUD API``, ensure that both the CRUD
 
     from django_access_point.views.crud import CrudViewSet
     from .serializers import PostSerializer
-    from .models import Post, PostCustomField, PostCustomFieldValue
+    from .models import Post, PostCustomField, PostCustomFieldOptions, PostCustomFieldValue
 
     class PostViewSet(CrudViewSet):
         queryset = Post.objects.all()
         list_fields = {"id": "ID", "name": "Name", "description": "Description"}
+        list_search_fields = ["name", "description"]
         serializer_class = PostSerializer
         custom_field_model = PostCustomField
+        custom_field_options_model = PostCustomFieldOptions
         custom_field_value_model = PostCustomFieldValue
 
-Include ``custom_field_model`` & ``custom_field_value_model`` to the **CRUD** views.
+Include ``custom_field_model``, ``custom_field_options_model`` & ``custom_field_value_model`` to the **CRUD** views.

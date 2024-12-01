@@ -29,3 +29,4 @@ Contents
    crud
    custom-field
    custom-field-integration
+   crud-search-filter

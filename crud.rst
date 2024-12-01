@@ -12,7 +12,7 @@ logic rather than CRUD functionality.
     * **Read**: Retrieves records.
     * **Update**: Modifies existing records.
     * **Delete**: Soft delete records.
-    * **List**: List all records with pagination.
+    * **List**: List all records with pagination, search & filter.
 
 By inheriting from ``CrudViewSet``, you can quickly implement these APIs without needing to write custom
 code for each one.
@@ -54,10 +54,12 @@ Basic
     class PostViewSet(CrudViewSet):
         queryset = Post.objects.all()
         list_fields = {"id": "ID", "name": "Name", "description": "Description"}
+        list_search_fields = ["name", "description"]
         serializer_class = PostSerializer
+..
 
-``list_fields``: Define the fields that need to be returned in the List API response. This should be in the format:
-*{<model_field>: <label_to_display_on_list>}*
+    * ``list_fields``: Define the fields that need to be returned in the List API response. This should be in the format: *{<model_field>: <label_to_display_on_list>}*
+    * ``list_search_fields``: Define the fields that need to be used in the List API Search.
 
 **urls.py**
 
@@ -93,6 +95,7 @@ the following methods:
     class PostViewSet(CrudViewSet):
         # Define the default queryset for the viewset
         queryset = Post.objects.all()
+        list_search_fields = ["name", "description"]
         serializer_class = PostSerializer
 
         def get_list_fields(self):

@@ -18,7 +18,7 @@ code for each one.
 
 .. code-block:: python
 
-    from django_access_point.models.custom_field import CustomFieldBase, CustomFieldValueBase
+    from django_access_point.models.custom_field import CustomFieldBase, CustomFieldOptionsBase, CustomFieldValueBase
     from .models import Tenant, Post
 
     class PostCustomField(CustomFieldBase):
@@ -26,7 +26,16 @@ code for each one.
             Tenant, on_delete=models.CASCADE, null=True, default=None
         )
 
-*Note: These are the required fields in the Custom Field Model. You can also add your own custom fields as per your requirements.*
+*Note: These are the required fields in the Custom Field Model. Make sure this field name is not changed.*
+
+.. code-block:: python
+
+    class PostCustomFieldOptions(CustomFieldOptionsBase):
+        custom_field = models.ForeignKey(PostCustomField, on_delete=models.CASCADE)
+
+*Note: These are the required fields in the Custom Field Options Model. Make sure this field name is not changed.*
+
+* ``custom_field``: This should be a **ForeignKey** to the model that defines the custom field. For example, if you are mapping the Custom Field Value to ``PostCustomField``, specify ``PostCustomField`` as the foreign key.
 
 .. code-block:: python
 
@@ -34,7 +43,7 @@ code for each one.
         submission = models.ForeignKey(Post, related_name="custom_field_values", on_delete=models.CASCADE)
         custom_field = models.ForeignKey(PostCustomField, on_delete=models.CASCADE)
 
-*Note: These are the required fields in the  Custom Field Value Model. Make sure these 2 field names are not changed. You can also add your own custom fields as per your requirements.*
+*Note: These are the required fields in the Custom Field Value Model. Make sure these 2 field names are not changed. You can also add your own custom fields as per your requirements.*
 
 * ``submission``: This should be a **ForeignKey** to the model you want to map the **Custom Field Value** to. For instance, if you want to map this Custom Field Value to the ``Post`` model, use ``Post`` as the foreign key. Make sure to specify the ``related_name`` as ``custom_field_values``.
 * ``custom_field``: This should be a **ForeignKey** to the model that defines the custom field. For example, if you are mapping the Custom Field Value to ``PostCustomField``, specify ``PostCustomField`` as the foreign key.
@@ -57,11 +66,12 @@ code for each one.
 
     from django_access_point.views.custom_field import CustomFieldViewSet
     from .serializers import PostCustomFieldSerializer
-    from .models import PostCustomField
+    from .models import PostCustomField, PostCustomFieldOptions
 
     class PostCustomFieldViewSet(CustomFieldViewSet):
         queryset = PostCustomField.objects.all()
         serializer_class = PostCustomFieldSerializer
+        custom_field_options_model = PostCustomFieldOptions
 
 **urls.py**
 
